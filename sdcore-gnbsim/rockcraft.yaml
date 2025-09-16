@@ -1,7 +1,7 @@
 name: sdcore-gnbsim
 base: bare
 build-base: ubuntu@24.04
-version: '1.6.1'
+version: '1.6.3'
 summary: SD-Core gnbsim
 description: SD-Core gnbsim
 license: Apache-2.0
@@ -15,7 +15,7 @@ parts:
     source-type: git
     source-tag: v${CRAFT_PROJECT_VERSION}
     build-snaps:
-      - go/1.22/stable
+      - go/1.24/stable
     organize:
       bin/cmd: bin/gnbsim
     stage-packages:
