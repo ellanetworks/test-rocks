@@ -1,5 +1,5 @@
 name: ubuntu-router
-base: ubuntu:22.04
+base: ubuntu@24.04
 version: '0.1'
 summary: A Linux router.
 description: |
@@ -13,3 +13,10 @@ parts:
     plugin: nil
     stage-packages:
       - iptables
+
+  responder:
+    plugin: dump
+    source: files/responder.py
+    source-type: file
+    stage-packages:
+      - python3
