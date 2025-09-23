@@ -42,3 +42,9 @@ parts:
         - iproute2
         - iptables
         - iputils-ping
+
+  scapy:
+    plugin: nil
+    stage-packages:
+      - python3
+      - python3-scapy
