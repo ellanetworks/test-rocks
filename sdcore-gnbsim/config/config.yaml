@@ -3,7 +3,7 @@ configuration:
   gnbs:
     gnb1:
       defaultAmf:
-        hostName: 10.3.0.3
+        hostName: 10.3.0.2
         port: 38412
       globalRanId:
         gNbId:
@@ -43,8 +43,8 @@ configuration:
     dnn: internet
     enable: true
     gnbName: gnb1
-    key: 5122250214c33e723a5dd523fc145fc0
-    opc: 520c64c7b8c6ab982e4b465cba71952a
+    key: 0eefb0893e6f1c2855a3a244c6db1277
+    opc: 98da19bbc55e2a5b53857d10557b1d26
     plmnId:
       mcc: '001'
       mnc: '01'
@@ -61,8 +61,8 @@ configuration:
     dnn: internet
     enable: true
     gnbName: gnb1
-    key: 5122250214c33e723a5dd523fc145fc0
-    opc: 520c64c7b8c6ab982e4b465cba71952a
+    key: 0eefb0893e6f1c2855a3a244c6db1277
+    opc: 98da19bbc55e2a5b53857d10557b1d26
     perUserTimeout: 100
     plmnId:
       mcc: '001'
@@ -80,8 +80,8 @@ configuration:
     enable: true
     execInParallel: false
     gnbName: gnb1
-    key: 5122250214c33e723a5dd523fc145fc0
-    opc: 520c64c7b8c6ab982e4b465cba71952a
+    key: 0eefb0893e6f1c2855a3a244c6db1277
+    opc: 98da19bbc55e2a5b53857d10557b1d26
     plmnId:
       mcc: '001'
       mnc: '01'
@@ -98,8 +98,8 @@ configuration:
     enable: true
     execInParallel: false
     gnbName: gnb1
-    key: 5122250214c33e723a5dd523fc145fc0
-    opc: 520c64c7b8c6ab982e4b465cba71952a
+    key: 0eefb0893e6f1c2855a3a244c6db1277
+    opc: 98da19bbc55e2a5b53857d10557b1d26
     plmnId:
       mcc: '001'
       mnc: '01'
@@ -117,8 +117,8 @@ configuration:
     enable: true
     execInParallel: false
     gnbName: gnb1
-    key: 5122250214c33e723a5dd523fc145fc0
-    opc: 520c64c7b8c6ab982e4b465cba71952a
+    key: 0eefb0893e6f1c2855a3a244c6db1277
+    opc: 98da19bbc55e2a5b53857d10557b1d26
     plmnId:
       mcc: '001'
       mnc: '01'
