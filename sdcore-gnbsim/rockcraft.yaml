@@ -31,3 +31,8 @@ parts:
       "*": etc/
     stage:
       - etc/
+
+  config:
+    plugin: dump
+    source: config/
+    source-type: local
