@@ -48,3 +48,8 @@ parts:
     stage-packages:
       - python3
       - python3-scapy
+
+  config:
+    plugin: dump
+    source: config/
+    source-type: local
