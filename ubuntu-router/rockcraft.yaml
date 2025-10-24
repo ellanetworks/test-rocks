@@ -9,10 +9,12 @@ platforms:
   amd64:
 
 parts:
-  iptables:
+  ip-tools:
     plugin: nil
     stage-packages:
       - iptables
+      - iproute2
+      - iputils-ping
 
   responder:
     plugin: dump
