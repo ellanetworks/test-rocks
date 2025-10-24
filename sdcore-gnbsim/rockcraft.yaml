@@ -22,6 +22,7 @@ parts:
       - iproute2
       - libc6
       - base-files
+
   version:
     plugin: nil
     override-build: |
@@ -31,3 +32,8 @@ parts:
       "*": etc/
     stage:
       - etc/
+
+  config:
+    plugin: dump
+    source: config/
+    source-type: local
