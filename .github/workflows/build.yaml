@@ -35,6 +35,7 @@ jobs:
 
       - name: Save container image to file
         run: |
+          mv ${{ inputs.path }}/*.rock .
           rock_file=$(ls *.rock | tail -n 1)
           sudo rockcraft.skopeo --insecure-policy copy oci-archive:"${rock_file}" docker-daemon:${{ inputs.artifact-name }}:latest
           docker save -o ${{ inputs.artifact-name }}-${{ matrix.arch }}.tar ${{ inputs.artifact-name }}:latest
