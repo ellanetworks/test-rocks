@@ -17,7 +17,12 @@ on:
 
 jobs:
   build-rock:
-    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        arch: [amd64, arm64]
+    runs-on: ${{ (matrix.arch == 'arm64' && 'ubuntu-24.04-arm') || 'ubuntu-24.04' }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v5
@@ -28,8 +33,14 @@ jobs:
           rockcraft-channel: edge
           path: ${{ inputs.path }}
 
+      - name: Save container image to file
+        run: |
+          rock_file=$(ls *.rock | tail -n 1)
+          sudo rockcraft.skopeo --insecure-policy copy oci-archive:"${rock_file}" docker-daemon:${{ inputs.artifact-name }}:latest
+          docker save -o ${{ inputs.artifact-name }}-${{ matrix.arch }}.tar ${{ inputs.artifact-name }}:latest
+
       - name: Upload container image to GitHub Artifact
         uses: actions/upload-artifact@v5
         with:
-          name: ${{ inputs.artifact-name }}
-          path: ${{ steps.rockcraft.outputs.rock }}
+          name: ${{ inputs.artifact-name }}-${{ matrix.arch }}
+          path: ${{ inputs.artifact-name }}-${{ matrix.arch }}.tar
