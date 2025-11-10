@@ -7,6 +7,10 @@ on:
         description: Name of the artifact
         required: true
         type: string
+      path:
+        description: Path to the rockcraft.yaml file
+        required: true
+        type: string
 
 jobs:
   publish-image:
@@ -53,7 +57,7 @@ jobs:
 
       - name: Create and push manifest
         run: |
-          version="$(cat version/VERSION)"
+          version="$(yq '.version' ${{ inputs.path }}/rockcraft.yaml)"
 
           docker manifest create ghcr.io/ellanetworks/${{ inputs.artifact-name }}:${version} \
             ghcr.io/ellanetworks/${{ inputs.artifact-name }}:${version}-amd64 \
