@@ -36,7 +36,7 @@ jobs:
 
       - name: Import and push to github package (${{ matrix.arch }})
         run: |
-          version="$(cat version/VERSION)"
+          version="$(yq '.version' ${{ inputs.path }}/rockcraft.yaml)"
           docker load -i ${{ inputs.artifact-name }}-${{ matrix.arch }}.tar
           docker tag ${{ inputs.artifact-name }}:latest ghcr.io/ellanetworks/${{ inputs.artifact-name }}:${version}-${{ matrix.arch }}
           docker push ghcr.io/ellanetworks/${{ inputs.artifact-name }}:${version}-${{ matrix.arch }}
