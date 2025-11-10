@@ -14,13 +14,13 @@ jobs:
   build-ueransim-rock:
     uses: ./.github/workflows/build.yaml
     with:
-      artifact-name: ueransim-rock
+      artifact-name: ueransim
       path: ueransim
 
   build-gnbsim-rock:
     uses: ./.github/workflows/build.yaml
     with:
-      artifact-name: gnbsim-rock
+      artifact-name: sdcore-gnbsim
       path: sdcore-gnbsim
 
   build-ubuntu-router-rock:
@@ -34,7 +34,7 @@ jobs:
     # if: github.ref_name == 'main'
     uses: ./.github/workflows/publish.yaml
     with:
-      artifact-name: ueransim-rock
+      artifact-name: ueransim
       path: ueransim
 
   publish-gnbsim-rock:
@@ -42,7 +42,7 @@ jobs:
     # if: github.ref_name == 'main'
     uses: ./.github/workflows/publish.yaml
     with:
-      artifact-name: gnbsim-rock
+      artifact-name: sdcore-gnbsim
       path: sdcore-gnbsim
 
   publish-ubuntu-router-rock:
