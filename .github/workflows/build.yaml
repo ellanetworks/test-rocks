@@ -41,7 +41,7 @@ jobs:
           docker save -o ${{ inputs.artifact-name }}-${{ matrix.arch }}.tar ${{ inputs.artifact-name }}:latest
 
       - name: Upload container image to GitHub Artifact
-        uses: actions/upload-artifact@v5
+        uses: actions/upload-artifact@v6
         with:
           name: ${{ inputs.artifact-name }}-${{ matrix.arch }}
           path: ${{ inputs.artifact-name }}-${{ matrix.arch }}.tar
