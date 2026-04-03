@@ -22,7 +22,7 @@ configuration:
             mcc: '001'
             mnc: '01'
           taiSliceSupportList:
-          - sd: '102030'
+          - sd: ''
             sst: 1
         tac: '000001'
       - broadcastPlmnList:
@@ -51,7 +51,7 @@ configuration:
     profileName: profile1
     profileType: register
     sNssai:
-      sd: '102030'
+      sd: ''
       sst: 1
     sequenceNumber: '000000000022'
     startImsi: '001010100000001'
@@ -70,7 +70,7 @@ configuration:
     profileName: profile2
     profileType: pdusessest
     sNssai:
-      sd: '102030'
+      sd: ''
       sst: 1
     sequenceNumber: '000000000022'
     startImsi: '001010100000001'
@@ -88,7 +88,7 @@ configuration:
     profileName: profile3
     profileType: anrelease
     sNssai:
-      sd: '102030'
+      sd: ''
       sst: 1
     sequenceNumber: '000000000022'
     startImsi: '001010100000001'
@@ -107,7 +107,7 @@ configuration:
     profileType: uetriggservicereq
     retransMsg: false
     sNssai:
-      sd: '102030'
+      sd: ''
       sst: 1
     sequenceNumber: '000000000022'
     startImsi: '001010100000001'
@@ -125,7 +125,7 @@ configuration:
     profileName: profile5
     profileType: deregister
     sNssai:
-      sd: '102030'
+      sd: ''
       sst: 1
     sequenceNumber: '000000000022'
     startImsi: '001010100000001'
