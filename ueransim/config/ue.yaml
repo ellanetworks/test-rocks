@@ -33,11 +33,9 @@ sessions:
     apn: 'internet'
     slice:
       sst: 0x01
-      sd: 0x102030
 
 configured-nssai:
   - sst: 0x01
-    sd: 0x102030
 
 default-nssai:
   - sst: 1
