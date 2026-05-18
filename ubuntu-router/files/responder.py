@@ -3,6 +3,13 @@ import socket
 import sys
 
 
+def _unmap(host):
+    # AF_INET6 sockets with IPV6_V6ONLY=0 report IPv4 peers as
+    # v4-mapped IPv6 addresses ("::ffff:10.6.0.2"); strip the prefix
+    # so the echo string matches a pure-IPv4 socket's view.
+    return host[7:] if host.startswith('::ffff:') else host
+
+
 class UDPHandler(asyncio.DatagramProtocol):
     def connection_made(self, transport):
         self.transport = transport
@@ -10,7 +17,7 @@ class UDPHandler(asyncio.DatagramProtocol):
     def datagram_received(self, data, addr):
         # addr is (host, port) for AF_INET and (host, port, flowinfo,
         # scopeid) for AF_INET6 — only the first two elements are used.
-        response = f"{addr[0]}:{addr[1]}"
+        response = f"{_unmap(addr[0])}:{addr[1]}"
         self.transport.sendto(response.encode(), addr)
 
     def error_received(self, exc):
@@ -20,7 +27,7 @@ class UDPHandler(asyncio.DatagramProtocol):
 async def handle_tcp(reader, writer):
     _ = await reader.read(1024)
     addr = writer.get_extra_info('peername')
-    writer.write(f"{addr[0]}:{addr[1]}".encode())
+    writer.write(f"{_unmap(addr[0])}:{addr[1]}".encode())
     writer.close()
     await writer.wait_closed()
 
