@@ -19,15 +19,7 @@ class UDPHandler(asyncio.DatagramProtocol):
 
 
 async def handle_tcp(reader, writer):
-    sock = writer.get_extra_info('socket')
-    if sock is not None:
-        # TCP_NODELAY: send immediately, no Nagle coalescing.
-        sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_NODELAY, 1)
-        # TCP_QUICKACK: skip delayed-ACK on this recv.
-        sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_QUICKACK, 1)
     _ = await reader.read(1024)
-    if sock is not None:
-        sock.setsockopt(socket.IPPROTO_TCP, socket.TCP_QUICKACK, 1)
     writer.write(RESPONSE)
     writer.close()
     await writer.wait_closed()
