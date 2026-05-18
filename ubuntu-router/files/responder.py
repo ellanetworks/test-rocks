@@ -2,12 +2,9 @@ import asyncio
 import socket
 import sys
 
-
-def _unmap(host):
-    # AF_INET6 sockets with IPV6_V6ONLY=0 report IPv4 peers as
-    # v4-mapped IPv6 addresses ("::ffff:10.6.0.2"); strip the prefix
-    # so the echo string matches a pure-IPv4 socket's view.
-    return host[7:] if host.startswith('::ffff:') else host
+# Fixed-length echo so flow-report byte counts are deterministic
+# regardless of the client's address representation.
+RESPONSE = b"ella-responder-rp"  # 17 bytes
 
 
 class UDPHandler(asyncio.DatagramProtocol):
@@ -15,10 +12,7 @@ class UDPHandler(asyncio.DatagramProtocol):
         self.transport = transport
 
     def datagram_received(self, data, addr):
-        # addr is (host, port) for AF_INET and (host, port, flowinfo,
-        # scopeid) for AF_INET6 — only the first two elements are used.
-        response = f"{_unmap(addr[0])}:{addr[1]}"
-        self.transport.sendto(response.encode(), addr)
+        self.transport.sendto(RESPONSE, addr)
 
     def error_received(self, exc):
         print(f"UDP error: {exc}")
@@ -26,8 +20,7 @@ class UDPHandler(asyncio.DatagramProtocol):
 
 async def handle_tcp(reader, writer):
     _ = await reader.read(1024)
-    addr = writer.get_extra_info('peername')
-    writer.write(f"{_unmap(addr[0])}:{addr[1]}".encode())
+    writer.write(RESPONSE)
     writer.close()
     await writer.wait_closed()
 
