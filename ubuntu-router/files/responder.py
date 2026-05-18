@@ -1,4 +1,5 @@
 import asyncio
+import socket
 import sys
 
 
@@ -24,6 +25,16 @@ async def handle_tcp(reader, writer):
     await writer.wait_closed()
 
 
+def dual_stack_socket(kind, port):
+    """AF_INET6 socket with IPV6_V6ONLY=0 — accepts both IPv4 and IPv6
+    via v4-mapped addresses. Explicit setsockopt so behavior doesn't
+    depend on the host's sysctl default for net.ipv6.bindv6only."""
+    sock = socket.socket(socket.AF_INET6, kind)
+    sock.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
+    sock.bind(('::', port))
+    return sock
+
+
 async def main():
     try:
         port = int(sys.argv[1])
@@ -33,16 +44,12 @@ async def main():
 
     loop = asyncio.get_event_loop()
 
-    # UDP: one explicit listener per address family so behaviour is
-    # the same regardless of the host's IPV6_V6ONLY default.
-    for host in ('0.0.0.0', '::'):
-        await loop.create_datagram_endpoint(
-            UDPHandler,
-            local_addr=(host, port),
-        )
+    await loop.create_datagram_endpoint(
+        UDPHandler, sock=dual_stack_socket(socket.SOCK_DGRAM, port))
 
-    # TCP: host=None makes asyncio create a socket per family.
-    server = await asyncio.start_server(handle_tcp, host=None, port=port)
+    tcp_sock = dual_stack_socket(socket.SOCK_STREAM, port)
+    tcp_sock.listen()
+    server = await asyncio.start_server(handle_tcp, sock=tcp_sock)
     async with server:
         await server.serve_forever()
 
