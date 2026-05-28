@@ -1,6 +1,6 @@
 name: ubuntu-router
 base: ubuntu@24.04
-version: '0.1'
+version: '0.2'
 summary: A Linux router.
 description: |
     This container image is used to operate Linux iptables routers.
@@ -16,6 +16,7 @@ parts:
       - iptables
       - iproute2
       - iputils-ping
+      - tcpdump
 
   responder:
     plugin: dump
