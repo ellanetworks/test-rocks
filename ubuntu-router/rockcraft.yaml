@@ -1,6 +1,6 @@
 name: ubuntu-router
 base: ubuntu@24.04
-version: '0.2'
+version: '0.1'
 summary: A Linux router.
 description: |
     This container image is used to operate Linux iptables routers.
