@@ -17,6 +17,7 @@ parts:
       - iproute2
       - iputils-ping
       - tcpdump
+      - ethtool
 
   responder:
     plugin: dump
