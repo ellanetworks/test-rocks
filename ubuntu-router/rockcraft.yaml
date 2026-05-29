@@ -25,3 +25,17 @@ parts:
     source-type: file
     stage-packages:
       - python3
+
+  # tcpdump drops privileges to the "tcpdump" user by default; the rock stages
+  # the package without running its postinst, so create the user/group here.
+  # base-passwd_data seeds /etc/passwd and /etc/group so useradd/groupadd --root
+  # can modify them in the rock filesystem.
+  tcpdump-user:
+    plugin: nil
+    stage-packages:
+      - base-passwd_data
+    override-build: |
+      craftctl default
+      groupadd --root "${CRAFT_PART_INSTALL}" --system tcpdump
+      useradd --root "${CRAFT_PART_INSTALL}" --system --gid tcpdump \
+        --no-create-home --home-dir /nonexistent --shell /usr/sbin/nologin tcpdump
