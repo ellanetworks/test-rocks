@@ -6,6 +6,22 @@ import sys
 # regardless of the client's address representation.
 RESPONSE = b"ella-responder-rp"  # 17 bytes
 
+# The reporting port answers with the source it observed instead, so a caller can
+# tell whether the network is still translating its flow the same way. It is a
+# separate port because the echo above is fixed-length on purpose: a variable
+# reply there would change the byte counts flow reports assert on.
+REPORT_PORT_OFFSET = 1
+
+
+def format_source(addr):
+    """addr as the responder saw it, with v4-mapped addresses unwrapped so the
+    representation does not depend on the socket family."""
+    host, port = addr[0], addr[1]
+    if host.startswith("::ffff:"):
+        host = host[len("::ffff:"):]
+
+    return "src={} {}\n".format(host, port).encode()
+
 
 class UDPHandler(asyncio.DatagramProtocol):
     def connection_made(self, transport):
@@ -16,6 +32,24 @@ class UDPHandler(asyncio.DatagramProtocol):
 
     def error_received(self, exc):
         print(f"UDP error: {exc}")
+
+
+class UDPReportHandler(asyncio.DatagramProtocol):
+    def connection_made(self, transport):
+        self.transport = transport
+
+    def datagram_received(self, data, addr):
+        self.transport.sendto(format_source(addr), addr)
+
+    def error_received(self, exc):
+        print(f"UDP report error: {exc}")
+
+
+async def handle_tcp_report(reader, writer):
+    _ = await reader.read(1024)
+    writer.write(format_source(writer.get_extra_info("peername")))
+    writer.close()
+    await writer.wait_closed()
 
 
 async def handle_tcp(reader, writer):
@@ -47,11 +81,20 @@ async def main():
     await loop.create_datagram_endpoint(
         UDPHandler, sock=dual_stack_socket(socket.SOCK_DGRAM, port))
 
+    report_port = port + REPORT_PORT_OFFSET
+
+    await loop.create_datagram_endpoint(
+        UDPReportHandler, sock=dual_stack_socket(socket.SOCK_DGRAM, report_port))
+
+    report_sock = dual_stack_socket(socket.SOCK_STREAM, report_port)
+    report_sock.listen()
+    report_server = await asyncio.start_server(handle_tcp_report, sock=report_sock)
+
     tcp_sock = dual_stack_socket(socket.SOCK_STREAM, port)
     tcp_sock.listen()
     server = await asyncio.start_server(handle_tcp, sock=tcp_sock)
-    async with server:
-        await server.serve_forever()
+    async with server, report_server:
+        await asyncio.gather(server.serve_forever(), report_server.serve_forever())
 
 
 asyncio.run(main())
